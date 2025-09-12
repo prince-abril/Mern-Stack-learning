@@ -23,17 +23,17 @@ app.post("/add-task",(req,res)=>{
     res.send("insert task")
 })
 
-app.post("/user/add-user", async (req,res)=>{
-    try{
-        const {username,email,age,password}= req.body
-        const newUser = new User({username,email,age,password})
-        const savedUser = await newUser.save();
+// app.post("/user/add-user", async (req,res)=>{
+//     try{
+//         const {username,email,age,password}= req.body
+//         const newUser = new User({username,email,age,password})
+//         const savedUser = await newUser.save();
         
-        res.status(201).json(savedUser)
-    }catch(error){
-        res.status(500).json({message:'failed to insert user',error:error.message})
-    }
-});
+//         res.status(201).json(savedUser)
+//     }catch(error){
+//         res.status(500).json({message:'failed to insert user',error:error.message})
+//     }
+// });
 
 app.get("/user/all-user", async(req,res)=>{
     try{
