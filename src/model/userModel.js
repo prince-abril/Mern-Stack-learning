@@ -22,16 +22,25 @@ const userSchema = new mongoose.Schema({
     }
 
 
-},{
-    timestamps:true
 })
 
+userSchema.index({name:1});
+
+userSchema.methods.validatePassword = async function (password) {
+    const user = this;
+    const passwordHash = user.password;
+    const isPasswordValid = await bcrypt.compare(password,passwordHash);
+    return isPasswordValid
+}
+
 userSchema.pre('save',async function (next) {
-    if (!this.isModified('password')) return next();
+    const user = this;
+    if (user.isModified('password')) return next();
 
     try{
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password ,salt)
+        const hashedPassword = await bcrypt.hash(user.password,10)
+        user.password = hashedPassword
+        
         next();
     }catch(error){
         next(error)
